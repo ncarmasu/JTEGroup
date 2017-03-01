@@ -3,20 +3,20 @@ package ro.jte.atomix;
 import io.atomix.AtomixClient;
 import io.atomix.catalyst.transport.Address;
 import io.atomix.catalyst.transport.netty.NettyTransport;
-import io.atomix.collections.DistributedMap;
 import io.atomix.variables.DistributedValue;
-import org.springframework.context.annotation.Bean;
+import ro.jte.Property;
 
+import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
-public class AtomixConfig {
+public class AtomixCluster {
     private AtomixClient client;
     private List<Address> cluster;
 
-    public AtomixConfig(List<Address> cluster){
+    public AtomixCluster(List<Address> cluster){
         this.cluster = cluster;
         this.connect(this.cluster);
     }
@@ -36,16 +36,40 @@ public class AtomixConfig {
         this.client.getValue(key).join().set(value);
     }
 
+    public void addStringPropertyToCluster(String key, String value) {
+        DistributedValue val = client.getValue(key).join();
+        val.set(value, Duration.ofSeconds(1)).thenRun(() -> {
+            System.out.println("Value set with TTL of 1 second");
+        });
+    }
+
     public Object getPropertyFromCluster(String key) {
         Object result = null;
         try {
-            result = client.<Object>getValue(key).get();
+            result = client.getValue(key).get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
 
 
         return result;
+    }
+
+    public List<Property> getAllProperties() {
+        Set<String> keys = getKeys();
+        List<Property> properties = new ArrayList<>();
+
+        for(String key : keys) {
+            client.getValue(key).thenAccept(value -> {
+                try {
+                    properties.add(new Property(key, value.get().get()));
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+
+        return properties;
     }
 
     private void connect(List<Address> cluster) {

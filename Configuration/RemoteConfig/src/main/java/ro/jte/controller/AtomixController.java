@@ -1,9 +1,8 @@
 package ro.jte.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ro.jte.Property;
-import ro.jte.atomix.AtomixConfig;
+import ro.jte.atomix.AtomixCluster;
 
 import javax.annotation.Resource;
 import java.util.Set;
@@ -11,8 +10,8 @@ import java.util.Set;
 @RestController
 public class AtomixController {
 
-    @Resource(name = "atomixConfigBean")
-    AtomixConfig atomixConfig;
+    @Resource(name = "atomixClusterBean")
+    AtomixCluster atomixCluster;
 
     @RequestMapping("/")
     public String index() {
@@ -21,16 +20,21 @@ public class AtomixController {
 
     @RequestMapping("/properties")
     public Set<String> propertyKeys() {
-        return atomixConfig.getKeys();
+        return atomixCluster.getKeys();
+    }
+
+    @RequestMapping("/add")
+    public void addString() {
+        atomixCluster.addStringPropertyToCluster("test", "value");
     }
 
     @RequestMapping("/property")
     public String getProperty(@RequestParam("key") String key) {
-        return atomixConfig.getPropertyFromCluster(key).toString();
+        return atomixCluster.getPropertyFromCluster(key).toString();
     }
 
     @RequestMapping(value="/property", method = RequestMethod.POST)
     public void addProperty(@RequestBody Property property) {
-        atomixConfig.addPropertyToCluster(property.getKey(), property.getValue());
+        atomixCluster.addPropertyToCluster(property.getKey(), property.getValue());
     }
 }
