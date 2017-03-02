@@ -5,6 +5,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import ro.jte.beans.ReloadableBean;
 import ro.jte.config.DevAppConfig;
 
 import java.util.Arrays;
@@ -14,7 +15,6 @@ import java.util.Arrays;
  */
 
 @RestController
-@RequestMapping("/listProps")
 public class ListPropertiesController {
 
 //    @Autowired
@@ -28,7 +28,15 @@ public class ListPropertiesController {
     @Autowired
     private Environment env;
 
-    @RequestMapping(method = RequestMethod.GET)
+    @Autowired
+    private ReloadableBean reloadableBean;
+
+    @RequestMapping(method = RequestMethod.GET, path = "/menu")
+    public String listMenu() {
+        return String.valueOf(reloadableBean.getMenuItemsList());
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/listProps")
     public String listProps() {
         StringBuilder sb = new StringBuilder();
 

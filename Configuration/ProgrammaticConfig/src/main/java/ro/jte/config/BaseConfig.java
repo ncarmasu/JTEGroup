@@ -11,23 +11,11 @@ import java.util.List;
  * Created by Narcis on 2/20/2017.
  */
 @Configuration
-@PropertySources(
-        {@PropertySource("${spring.profiles.active}/app-${spring.profiles.active}.properties"),
-                @PropertySource("${spring.profiles.active}/db-${spring.profiles.active}.properties"),
-                @PropertySource("overridden.properties")})
+//@PropertySources(
+//        {@PropertySource("${spring.profiles.active}/app-${spring.profiles.active}.properties"),
+//                @PropertySource("${spring.profiles.active}/db-${spring.profiles.active}.properties"),
+//                @PropertySource("overridden.properties")})
 public class BaseConfig {
 
-
-    @Value("simpleProperty")
-    private String simpleProperty;
-
-    @Value("${defaultValue:'DEFAULT_VALUE'}")
-    private String propWithDefaultValue;
-
-    @Value("${overrideDefault:'DEFAULT_VALUE'}")
-    private String overridenDefaultValue;
-
-    @Value("#{'${listOfValues}'.split(',')}")
-    private List<String> listOfValues;
 
 }
