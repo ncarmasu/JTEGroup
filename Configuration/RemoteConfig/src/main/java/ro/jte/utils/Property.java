@@ -1,4 +1,4 @@
-package ro.jte;
+package ro.jte.utils;
 
 /**
  * Created by Alex on 3/7/2017.
