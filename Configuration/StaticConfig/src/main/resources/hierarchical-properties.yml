@@ -1,0 +1,9 @@
+var1: var1
+var2: 1
+var3:
+  - test1
+  - test2
+#somedata:
+#  - abcd: 1
+#  - bcbd: 2
+#  - cdbd: 3
