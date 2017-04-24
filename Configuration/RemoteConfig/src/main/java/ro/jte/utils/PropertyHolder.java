@@ -4,10 +4,12 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
+import org.springframework.stereotype.Component;
 import ro.jte.hazelcast.HazelcastCluster;
 
 import java.util.Properties;
 
+@Component
 public class PropertyHolder extends PropertyPlaceholderConfigurer {
 
     Logger log = Logger.getLogger(PropertyPlaceholderConfigurer.class);
