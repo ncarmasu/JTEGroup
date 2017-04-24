@@ -1,6 +1,7 @@
 package ro.jte.utils;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
 import ro.jte.hazelcast.HazelcastCluster;
 
@@ -11,23 +12,17 @@ import javax.annotation.Resource;
  * Created by Alex on 3/14/2017.
  */
 @Component
+@RefreshScope
 public class UtilityBean {
 
-    @Resource(name="hazelcastClusterBean")
-    private HazelcastCluster cluster;
-
+    @Value( "${string}" )
     private String stringProperty;
 
+    @Value( "${integer}" )
     private Integer longProperty;
 
+    @Value( "${boolean}" )
     private Boolean booleanProperty;
-
-    @PostConstruct
-    public void init() {
-        this.stringProperty = (String) cluster.getProperty("string.property");
-        this.longProperty = (Integer) cluster.getProperty("integer.property");
-        this.booleanProperty = (Boolean) cluster.getProperty("boolean.property");
-    }
 
     @Override
     public String toString() {
